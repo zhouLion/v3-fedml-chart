@@ -1,6 +1,6 @@
 <script lang="ts" setup>
-import type { HierarchyLink, HierarchyNode } from 'd3-hierarchy'
-import { hierarchy } from 'd3-hierarchy'
+import type { HierarchyLink, HierarchyNode } from 'd3'
+import { hierarchy } from 'd3'
 import { uniqueBy } from '../utils/array'
 
 const props = withDefaults(defineProps<{
@@ -10,7 +10,7 @@ const props = withDefaults(defineProps<{
     nodeSize: 17,
 })
 
-const emits = defineEmits(['node-mouseover'])
+defineEmits(['node-mouseover'])
 
 const width = 700
 
@@ -71,11 +71,22 @@ function applyCache(id: string, edges: any[]) {
 }
 
 // only when data is changed, the cache should be reset.
-watch(props.data, () => {
+watch(() => props.data, () => {
     cachedCollapsedItems.value = []
 })
 
 const counter = ref(0)
+
+const treeState = reactive({
+    show: false,
+    node: null,
+    position: {
+        width: '400px',
+        height: '300px',
+        left: '0',
+        top: '0',
+    },
+})
 
 watch(() => [counter.value, treeData.value], () => {
     let i = 0
@@ -109,20 +120,53 @@ function handlerNodeClick(node: HierarchyNode<any> & { index: number; _children?
     }
     counter.value++
 }
+
+function throttle(fn: Function, wait: number) {
+    let timeout: number | undefined
+    return (...args: any[]) => {
+        if (timeout) {
+            return
+        }
+        timeout = window.setTimeout(() => {
+            fn(...args)
+            timeout = undefined
+        }, wait)
+    }
+}
+
+const handlerMouseover = ref(throttle((node: HierarchyNode<any> & { index: number; _children?: any[] }, evt) => {
+    treeState.show = !!node
+    treeState.node = node
+    treeState.position.left = `${evt?.x > window.innerWidth - 400 ? evt?.x - 412 : evt?.x + 12}px`
+    treeState.position.top = `${evt?.y > window.innerHeight - 300 ? evt?.y - 312 : evt?.y + 12}px`
+}, 200))
 </script>
 
 <template>
-    <svg :viewBox="viewBox.toString()" font-size="10" font-family="sans-serif">
-        <g fill="none" stroke="#999">
-            <SvgTreeLinkPath v-for="(d, i) in hierarchyRoot.links" :key="i" :node="d" />
-        </g>
-        <g>
-            <SvgTreeNodeItem
-                v-for="(d, i) in hierarchyRoot.nodes" :key="i"
-                :node="d"
-                @node-mouseover="emits('node-mouseover', d)"
-                @click="handlerNodeClick(d)"
-            />
-        </g>
-    </svg>
+    <div>
+        <svg :viewBox="viewBox.toString()" font-size="10" font-family="sans-serif" @click.self="treeState.show = false">
+            <g fill="none" stroke="#999">
+                <SvgTreeLinkPath v-for="(d, i) in hierarchyRoot.links" :key="i" :node="d" />
+            </g>
+            <g>
+                <SvgTreeNodeItem
+                    v-for="(d, i) in hierarchyRoot.nodes" :key="i" :node="d" @node-mousemove="handlerMouseover"
+                    @click="handlerNodeClick(d)"
+                />
+            </g>
+        </svg>
+
+        <Teleport to="body">
+            <div
+                v-show="treeState.show" class="fixed bg-white z-9999
+                w-80 h-60 top-0 left-0 rounded-md
+                shadow shadow-md shadow-gray-600
+                overflow-y-auto pl-6 pr-2 box-content break-words animate-bounce-in-left"
+                :style="treeState.position"
+                @mouseover="treeState.show = true"
+            >
+                <ObjectDescription :data="treeState?.node?.data || {}" :excludes="['children']" />
+            </div>
+        </Teleport>
+    </div>
 </template>

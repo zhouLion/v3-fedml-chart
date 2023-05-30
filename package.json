@@ -6,6 +6,9 @@
     ".": {
       "import": "./dist/lib.js",
       "require": "./dist/lib.umd.cjs"
+    },
+    "./css": {
+      "import": "./dist/lib-entry.css"
     }
   },
   "scripts": {
@@ -16,7 +19,7 @@
   "files": [
     "dist/lib.js",
     "dist/lib.umd.cjs",
-    "dist/style.css",
+    "dist/lib-entry.css",
     "README.md"
   ],
   "devDependencies": {
@@ -24,25 +27,19 @@
     "@iconify-json/bi": "^1.1.16",
     "@iconify-json/tabler": "^1.1.77",
     "@types/d3": "^7.4.0",
-    "@types/d3-hierarchy": "^3.1.2",
-    "@types/d3-selection": "^3.0.5",
-    "@types/d3-shape": "^3.1.1",
     "@types/node": "^20.2.4",
     "@unocss/preset-icons": "^0.52.3",
     "@vitejs/plugin-vue": "^4.2.3",
+    "@vueuse/core": "^10.1.2",
+    "d3": "^7.8.4",
     "eslint": "^8.41.0",
     "typescript": "^5.0.4",
-    "@types/d3-transition": "^3.0.3",
-    "d3-hierarchy": "^3.1.2",
-    "d3-selection": "^3.0.0",
-    "d3-shape": "^3.2.0",
-    "d3-transition": "^3.0.1",
-    "vue": "^3.3.4",
     "unocss": "^0.52.3",
     "unplugin-auto-import": "^0.16.2",
     "unplugin-vue-components": "^0.24.1",
     "vite": "^4.3.8",
     "vitest": "^0.31.1",
+    "vue": "^3.3.4",
     "vue-tsc": "^1.6.5"
   }
 }

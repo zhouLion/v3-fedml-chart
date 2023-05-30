@@ -1,7 +1,9 @@
+/* eslint-disable sort-imports */
 /* eslint-disable @typescript-eslint/prefer-ts-expect-error */
-import 'd3-transition'
 import {
     create,
+    // eslint-disable-next-line unused-imports/no-unused-imports
+    transition,
     hierarchy as d3Hierarchy,
     linkHorizontal as d3LinkHorizontal,
     tree as d3Tree,

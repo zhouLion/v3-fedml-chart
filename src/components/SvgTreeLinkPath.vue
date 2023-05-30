@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 const props = withDefaults(defineProps<{
     node: any
-    columns: any[]
     nodeSize?: number
 }>(), {
     nodeSize: 17,

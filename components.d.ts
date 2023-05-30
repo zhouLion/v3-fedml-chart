@@ -11,6 +11,7 @@ declare module '@vue/runtime-core' {
   export interface GlobalComponents {
     CollapsibleTree: typeof import('./src/components/CollapsibleTree.vue')['default']
     IndentedTree: typeof import('./src/components/IndentedTree.vue')['default']
+    ObjectDescription: typeof import('./src/components/ObjectDescription.vue')['default']
     SvgTree: typeof import('./src/components/SvgTree.vue')['default']
     SvgTreeLinkPath: typeof import('./src/components/SvgTreeLinkPath.vue')['default']
     SvgTreeNodeItem: typeof import('./src/components/SvgTreeNodeItem.vue')['default']

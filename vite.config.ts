@@ -12,7 +12,7 @@ export default defineConfig({
     plugins: [
         vue(),
         AutoImport({
-            imports: ['vue'],
+            imports: ['vue', '@vueuse/core'],
             dirs: ['src/composables'],
             dts: true, // or a custom path
         }),
@@ -32,6 +32,7 @@ export default defineConfig({
             // the proper extensions will be added
             fileName: 'lib',
         },
+        cssCodeSplit: true,
         rollupOptions: {
             // 确保外部化处理那些你不想打包进库的依赖
             external: ['vue'],

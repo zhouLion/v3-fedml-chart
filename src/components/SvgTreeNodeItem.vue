@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import type { HierarchyNode } from 'd3-hierarchy'
+import type { HierarchyNode } from 'd3'
 import { truncate } from '../utils/text'
 
 const props = withDefaults(defineProps<{
@@ -9,7 +9,7 @@ const props = withDefaults(defineProps<{
     nodeSize: 17,
 })
 
-const emits = defineEmits(['click', 'node-mouseover'])
+const emits = defineEmits(['click', 'node-mousemove'])
 
 const tText = computed(() => {
     return truncate(props.node.data.name, 100)
@@ -52,14 +52,17 @@ function handleClick() {
 
 <template>
     <g
-        :transform="`translate(0, ${props.node.index * props.nodeSize})`" class="cursor-pointer" @click="handleClick"
-        @mouseover="emits('node-mouseover', props.node)"
+        :transform="`translate(0, ${props.node.index * props.nodeSize})`"
+        class="cursor-pointer" @click="handleClick"
     >
         <image v-if="isUser" v-bind="imageProps" />
         <circle v-else v-bind="circleProps" />
-        <text dy="0.32em" :x="props.node.depth * props.nodeSize + 10">
+        <text
+            dy="0.32em" :x="props.node.depth * props.nodeSize + 10"
+            @mousemove="(evt) => !isUser && emits('node-mousemove', props.node, evt)"
+        >
             {{ tText }}
         </text>
-        <title>{{ tTitleText }}</title>
+        // <title>{{ tTitleText }}</title>
     </g>
 </template>
