@@ -25,9 +25,10 @@
     "src/**/*.d.ts",
     "src/**/*.tsx",
     "src/**/*.vue",
+    "index.ts",
     "./auto-imports.d.ts",
     "./components.d.ts"
-  ],
+, "index.ts"  ],
   "exclude": [
     "src/data/*"
   ],

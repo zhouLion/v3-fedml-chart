@@ -7,7 +7,7 @@ defineProps<{
 
 <template>
     <text
-        v-for="({ label, value, format, x }) in columns"
+        v-for="({ label, x }) in columns"
         :key="label"
         dt="0.32em" :y="-nodeSize" :x="x" text-anchor="end" font-weight="bold"
     >

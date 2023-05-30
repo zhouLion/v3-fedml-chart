@@ -3,7 +3,7 @@ import type { Plugin } from 'vue'
 
 // import IndentedTree from './components/IndentedTree.vue'
 // import CollapsibleTree from './components/CollapsibleTree.vue'
-import SvgTree from './components/SvgTree.vue'
+import SvgTree from './src/components/SvgTree.vue'
 
 // export const FIndentedTree = IndentedTree
 // export const FCollapsibleTree = CollapsibleTree

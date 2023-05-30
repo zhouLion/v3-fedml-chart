@@ -1,6 +1,6 @@
 {
   "name": "v3-fedml-chart",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "type": "module",
   "exports": {
     ".": {
@@ -8,18 +8,20 @@
       "require": "./dist/lib.umd.cjs"
     },
     "./css": {
-      "import": "./dist/lib-entry.css"
+      "import": "./dist/index.css"
     }
   },
+  "typings": "index.d.ts",
   "scripts": {
     "dev": "vite",
+    "vdts": "vue-tsc ./index.ts --declaration --emitDeclarationOnly",
     "build": "vite build",
     "preview": "vite preview"
   },
   "files": [
     "dist/lib.js",
     "dist/lib.umd.cjs",
-    "dist/lib-entry.css",
+    "dist/index.css",
     "README.md"
   ],
   "devDependencies": {

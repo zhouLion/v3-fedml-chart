@@ -3,6 +3,8 @@ import type { HierarchyLink, HierarchyNode } from 'd3'
 import { hierarchy } from 'd3'
 import { uniqueBy } from '../utils/array'
 
+type MyHierarchyNode = HierarchyNode<any> & { index?: number; _children?: any[] }
+
 const props = withDefaults(defineProps<{
     data: any
     nodeSize?: number
@@ -28,7 +30,7 @@ function mapEdges(edges: any[]) {
 const cachedCollapsedItems = ref<string[]>([])
 
 const hierarchyRoot = ref<{
-    nodes: HierarchyNode<any>[]
+    nodes: Array<MyHierarchyNode>
     links: HierarchyLink<any>[]
 }>({
     nodes: [],
@@ -79,8 +81,9 @@ const counter = ref(0)
 
 const treeState = reactive({
     show: false,
-    node: null,
-    position: {
+    node: null as any,
+    style: {
+        transform: 'none',
         width: '400px',
         height: '300px',
         left: '0',
@@ -109,7 +112,7 @@ const viewBox = computed(() => {
     ]
 })
 
-function handlerNodeClick(node: HierarchyNode<any> & { index: number; _children?: any[] }) {
+function handlerNodeClick(node: MyHierarchyNode) {
     const id = node.data.id
     const has = cachedCollapsedItems.value.includes(id)
     if (has) {
@@ -121,7 +124,7 @@ function handlerNodeClick(node: HierarchyNode<any> & { index: number; _children?
     counter.value++
 }
 
-function throttle(fn: Function, wait: number) {
+function throttle(fn: Function, wait = 200) {
     let timeout: number | undefined
     return (...args: any[]) => {
         if (timeout) {
@@ -134,12 +137,16 @@ function throttle(fn: Function, wait: number) {
     }
 }
 
-const handlerMouseover = ref(throttle((node: HierarchyNode<any> & { index: number; _children?: any[] }, evt) => {
+const handlerMouseover = throttle((
+    node: MyHierarchyNode,
+    evt: MouseEvent,
+) => {
     treeState.show = !!node
     treeState.node = node
-    treeState.position.left = `${evt?.x > window.innerWidth - 400 ? evt?.x - 412 : evt?.x + 12}px`
-    treeState.position.top = `${evt?.y > window.innerHeight - 300 ? evt?.y - 312 : evt?.y + 12}px`
-}, 200))
+    const tx = `${evt?.x > window.innerWidth - 400 ? evt?.x - 412 : evt?.x + 12}px`
+    const ty = `${evt?.y > window.innerHeight - 300 ? evt?.y - 312 : evt?.y + 12}px`
+    treeState.style.transform = `translate(${tx}, ${ty})`
+})
 </script>
 
 <template>
@@ -151,7 +158,7 @@ const handlerMouseover = ref(throttle((node: HierarchyNode<any> & { index: numbe
             <g>
                 <SvgTreeNodeItem
                     v-for="(d, i) in hierarchyRoot.nodes" :key="i" :node="d" @node-mousemove="handlerMouseover"
-                    @click="handlerNodeClick(d)"
+                    @node-mouseleave="treeState.show = false" @click="handlerNodeClick(d)"
                 />
             </g>
         </svg>
@@ -161,9 +168,10 @@ const handlerMouseover = ref(throttle((node: HierarchyNode<any> & { index: numbe
                 v-show="treeState.show" class="fixed bg-white z-9999
                 w-80 h-60 top-0 left-0 rounded-md
                 shadow shadow-md shadow-gray-600
-                overflow-y-auto pl-6 pr-2 box-content break-words animate-bounce-in-left"
-                :style="treeState.position"
+                overflow-y-auto pl-6 pr-2 box-content break-words origin-top-left "
+                :style="treeState.style"
                 @mouseover="treeState.show = true"
+                @mouseleave="treeState.show = false"
             >
                 <ObjectDescription :data="treeState?.node?.data || {}" :excludes="['children']" />
             </div>
