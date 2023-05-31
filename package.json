@@ -1,6 +1,6 @@
 {
   "name": "v3-fedml-chart",
-  "version": "0.0.6",
+  "version": "0.0.8",
   "type": "module",
   "exports": {
     ".": {
@@ -22,6 +22,7 @@
     "dist/lib.js",
     "dist/lib.umd.cjs",
     "dist/index.css",
+    "index.d.ts",
     "README.md"
   ],
   "devDependencies": {

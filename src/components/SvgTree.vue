@@ -100,6 +100,8 @@ watch(() => [counter.value, treeData.value], () => {
         links: root.links(),
         nodes: root.descendants(),
     }
+}, {
+    immediate: true,
 })
 
 const viewBox = computed(() => {
