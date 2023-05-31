@@ -167,7 +167,8 @@ const handlerMouseover = throttle((
             <div
                 v-show="treeState.show" class="fixed bg-white z-9999
                 w-80 h-60 top-0 left-0 rounded-md
-                shadow shadow-md shadow-gray-600
+                shadow shadow-md shadow-gray-300
+                border
                 overflow-y-auto pl-6 pr-2 box-content break-words origin-top-left "
                 :style="treeState.style"
                 @mouseover="treeState.show = true"
