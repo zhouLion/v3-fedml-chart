@@ -16,6 +16,8 @@ defineEmits(['node-mouseover'])
 
 const width = 700
 
+const rootRef = ref()
+
 function mapEdges(edges: any[]) {
     return edges.map((edge: any) => {
         const { name } = edge
@@ -126,7 +128,7 @@ function handlerNodeClick(node: MyHierarchyNode) {
     counter.value++
 }
 
-function throttle(fn: Function, wait = 200) {
+function throttle(fn: Function, wait = 100) {
     let timeout: number | undefined
     return (...args: any[]) => {
         if (timeout) {
@@ -152,8 +154,11 @@ const handlerMouseover = throttle((
 </script>
 
 <template>
-    <div>
-        <svg :viewBox="viewBox.toString()" font-size="10" font-family="sans-serif" @click.self="treeState.show = false">
+    <div @mouseleave="treeState.show = false">
+        <svg
+            ref="rootRef" :viewBox="viewBox.toString()" font-size="10" font-family="sans-serif"
+            @click.self="treeState.show = false"
+        >
             <g fill="none" stroke="#999">
                 <SvgTreeLinkPath v-for="(d, i) in hierarchyRoot.links" :key="i" :node="d" />
             </g>
@@ -164,17 +169,14 @@ const handlerMouseover = throttle((
                 />
             </g>
         </svg>
-
-        <Teleport to="body">
+        <Teleport v-if="treeState.show" to="body">
             <div
-                v-show="treeState.show" class="fixed bg-white z-9999
+                class="fixed bg-white z-9999
                 w-80 h-60 top-0 left-0 rounded-md
                 shadow shadow-md shadow-gray-300
                 border
-                overflow-y-auto pl-6 pr-2 box-content break-words origin-top-left "
-                :style="treeState.style"
-                @mouseover="treeState.show = true"
-                @mouseleave="treeState.show = false"
+                overflow-y-auto pl-6 pr-2 box-content break-words origin-top-left " :style="treeState.style"
+                @mouseover="treeState.show = true" @mouseleave="treeState.show = false"
             >
                 <ObjectDescription :data="treeState?.node?.data || {}" :excludes="['children']" />
             </div>

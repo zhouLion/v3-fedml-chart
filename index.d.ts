@@ -23,5 +23,24 @@ export declare const FSvgTree: import("vue").DefineComponent<{
 }, {
     nodeSize: number;
 }, {}>;
+export declare const FLogViewer: import("vue").DefineComponent<{
+    loadLogs: {
+        type: import("vue").PropType<() => Promise<string[]>>;
+        required: true;
+    };
+    logCount: {
+        type: import("vue").PropType<number>;
+        required: true;
+    };
+}, {}, unknown, {}, {}, import("vue").ComponentOptionsMixin, import("vue").ComponentOptionsMixin, {}, string, import("vue").VNodeProps & import("vue").AllowedComponentProps & import("vue").ComponentCustomProps, Readonly<import("vue").ExtractPropTypes<{
+    loadLogs: {
+        type: import("vue").PropType<() => Promise<string[]>>;
+        required: true;
+    };
+    logCount: {
+        type: import("vue").PropType<number>;
+        required: true;
+    };
+}>>, {}, {}>;
 declare const plugin: Plugin;
 export default plugin;
